@@ -32,25 +32,14 @@ class LoginFormController: UIViewController {
         }
     }
     
-    // Когда клавиатура появляется
-    @objc func keyboardWasShown(notification: Notification) {
-
-        // Получаем размер клавиатуры
-        let info = notification.userInfo! as NSDictionary
-        let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue.size
-        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: kbSize.height, right: 0.0)
+    //жест нажатия к UIScrollView
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        // Добавляем отступ внизу UIScrollView, равный размеру клавиатуры
-        self.scrollView?.contentInset = contentInsets
-        scrollView?.scrollIndicatorInsets = contentInsets
-    }
-    
-    //Когда клавиатура исчезает
-    @objc func keyboardWillBeHidden(notification: Notification) {
-        
-        // Устанавливаем отступ внизу UIScrollView, равный 0
-        let contentInsets = UIEdgeInsets.zero
-        scrollView?.contentInset = contentInsets 
+        // жест нажатия
+        let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        // присвоим его UIScrollView
+        scrollView?.addGestureRecognizer(hideKeyboardGesture)
     }
     
     //подписаться на сообщения из центра уведомлений, которые рассылает клавиатура
@@ -71,30 +60,82 @@ class LoginFormController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    
+    // Когда клавиатура появляется
+    @objc func keyboardWasShown(notification: Notification) {
+        
+        // Получаем размер клавиатуры
+        let info = notification.userInfo! as NSDictionary
+        let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue.size
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: kbSize.height, right: 0.0)
+        
+        // Добавляем отступ внизу UIScrollView, равный размеру клавиатуры
+        self.scrollView?.contentInset = contentInsets
+        scrollView?.scrollIndicatorInsets = contentInsets
+    }
+    
+    //Когда клавиатура исчезает
+    @objc func keyboardWillBeHidden(notification: Notification) {
+        
+        // Устанавливаем отступ внизу UIScrollView, равный 0
+        let contentInsets = UIEdgeInsets.zero
+        scrollView?.contentInset = contentInsets 
+    }
+    
+    
+    
     //Добавим исчезновение клавиатуры при клике по пустому месту на экране и метод, который будет вызываться при клике.
     @objc func hideKeyboard() {
         self.scrollView?.endEditing(true)
     }
     
-    //жест нажатия к UIScrollView
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // жест нажатия
-        let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        // присвоим его UIScrollView
-        scrollView?.addGestureRecognizer(hideKeyboardGesture)
+    //метод проверки ввода логина и пароля при нажатии на кнопку Войти
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        //проверка данных
+        let checkResult = checkUserData()
+        
+        //ошибка, если данные не верны
+        if !checkResult {
+            showLoginError()
+        }
+        
+        //возвращаем результат
+        return checkResult
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func checkUserData() -> Bool {
+        guard let login = loginInput.text,
+            let password = passwordInput.text else { return false }
+        
+        if login == "admin" && password == "123456" {
+            return true
+        } else {
+            return false
+        }
     }
-    */
-
+    
+    func showLoginError() {
+        //сообщаем если введенные данные не верны, создаем контроллер
+        let alert = UIAlertController(title: "Ошибка", message: "Неверные данные пользователя", preferredStyle: .alert)
+        //создаем кнопку
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        //добавляем кнопку для алерта на контроллер
+        alert.addAction(action)
+        // показываем контроллер
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
+    
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
