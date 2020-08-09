@@ -40,6 +40,10 @@ class LoginFormController: UIViewController {
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         // присвоим его UIScrollView
         scrollView?.addGestureRecognizer(hideKeyboardGesture)
+        
+        loginInput.text = "admin"
+        passwordInput.text = "123456"
+        
     }
     
     //подписаться на сообщения из центра уведомлений, которые рассылает клавиатура
@@ -50,6 +54,11 @@ class LoginFormController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWasShown), name: UIResponder.keyboardWillShowNotification, object: nil)
         //Второе - когда она пропадает
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillBeHidden(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        //делаем увет navigation прозрачным чтобы установить свои обои
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
     }
     
     //от уведомлений надо отписываться, когда они не нужны. Добавим метод отписки при исчезновении контроллера с экрана
@@ -58,6 +67,10 @@ class LoginFormController: UIViewController {
         
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        //возвращаем цвет navigation bar to default для следующих экранов
+           navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+           navigationController?.navigationBar.shadowImage = nil
     }
     
     
