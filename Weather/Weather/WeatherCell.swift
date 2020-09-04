@@ -32,7 +32,7 @@ class WeatherCell: UICollectionViewCell {
     override func layoutSubviews() {
         
         super.layoutSubviews()
-            
+        
         self.shadowView.layer.shadowPath = UIBezierPath(ovalIn: self.shadowView.bounds).cgPath
         self.containerView.layer.cornerRadius = self.containerView.frame.width / 2
     }
