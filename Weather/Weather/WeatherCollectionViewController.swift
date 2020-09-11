@@ -29,7 +29,7 @@ extension WeatherCollectionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCell
-        
+        //cell.backgroundColor = .lightGray
         cell.weather.text = "30 C"
         cell.time.text = "03.08.2020 15:30"
         // Configure the cell

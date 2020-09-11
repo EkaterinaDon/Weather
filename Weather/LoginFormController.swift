@@ -16,6 +16,16 @@ class LoginFormController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     
+    @IBOutlet weak var titleView: UILabel!
+    
+    @IBOutlet weak var loginView: UILabel!
+    
+    @IBOutlet weak var passwordView: UILabel!
+    
+    @IBOutlet weak var authButton: UIButton!
+    
+    
+
     
     @IBAction func loginButtonPressed(_ sender: Any) {
         
@@ -32,6 +42,8 @@ class LoginFormController: UIViewController {
         }
     }
     
+    var interactiveAnimator: UIViewPropertyAnimator!
+    
     //жест нажатия к UIScrollView
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +55,14 @@ class LoginFormController: UIViewController {
         
         loginInput.text = "admin"
         passwordInput.text = "123456"
+        
+        let recognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        self.view.addGestureRecognizer(recognizer)
+
+        
+        animateTitleAppearing()
+        animateFieldsAppearing()
+        animateAuthButton()
         
     }
     
@@ -141,6 +161,125 @@ class LoginFormController: UIViewController {
     
     
     
+    // MARK: - Animation
+    
+    
+   //заголовка Weather создадим пружинную анимацию, будто он опускается немного ниже своего конечного местоположения, а затем возвращается к нему.
+    func animateTitleAppearing() {
+        
+//        UIView.animate(withDuration: 1,
+//                       delay: 1,
+//                       usingSpringWithDamping: 0.5,
+//                       initialSpringVelocity: 0,
+//                       options: .curveEaseOut,
+//                       animations: {
+//                           self.titleView.transform = .identity
+//                       },
+//                       completion: nil)
+        self.titleView.transform = CGAffineTransform(translationX: 0, y: -self.view.bounds.height / 2)
+
+        let animator = UIViewPropertyAnimator(duration: 1,
+                                              dampingRatio: 0.5,
+                                              animations: {
+                                                  self.titleView.transform = .identity
+        })
+
+        animator.startAnimation(afterDelay: 1)
+    }
+//Для полей ввода применим анимацию постепенного появления и будем использовать анимации слоя.
+    func animateFieldsAppearing() {
+        
+        //вычисляем расстояние по у для трансформации
+        let offset = abs(self.loginView.frame.midY - self.passwordView.frame.midY)
+                
+        self.loginView.transform = CGAffineTransform(translationX: 0, y: offset)
+        self.passwordView.transform = CGAffineTransform(translationX: 0, y: -offset)
+        
+        // keyframe-анимация, перемещение в сторону и вниз, и на исходное положение
+        UIView.animateKeyframes(withDuration: 1,
+                                delay: 1,
+                                options: .calculationModeCubicPaced, //равномерная, с плавными поворотами
+                                animations: {
+                                    UIView.addKeyframe(withRelativeStartTime: 0,
+                                                       relativeDuration: 0.5,
+                                                       animations: {
+             self.loginView.transform = CGAffineTransform(translationX: 150, y: 50)
+             self.loginView.transform = CGAffineTransform(translationX: -150, y: -50)
+                                    })
+                                    UIView.addKeyframe(withRelativeStartTime: 0.5,
+                                                       relativeDuration: 0.5,
+                                                       animations: {
+             self.loginView.transform = .identity
+             self.passwordView.transform = .identity
+                                    })
+        }, completion: nil)
+        
+        let fadeInAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeInAnimation.fromValue = 0
+        fadeInAnimation.toValue = 1
+
+        let scaleAnimation = CASpringAnimation(keyPath: "transform.scale")
+        scaleAnimation.fromValue = 0
+        scaleAnimation.toValue = 1
+        scaleAnimation.stiffness = 150
+        scaleAnimation.mass = 2
+
+        let animationsGroup = CAAnimationGroup()
+        animationsGroup.duration = 1
+        animationsGroup.beginTime = CACurrentMediaTime() + 1
+        animationsGroup.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animationsGroup.fillMode = CAMediaTimingFillMode.backwards
+        animationsGroup.animations = [fadeInAnimation, scaleAnimation]
+
+        self.loginView.layer.add(animationsGroup, forKey: nil)
+        self.passwordView.layer.add(animationsGroup, forKey: nil)
+
+    }
+    //К кнопке «Войти» применим пружинную анимацию увеличения и тоже будем использовать анимации слоя.
+
+    func animateAuthButton() {
+        let animation = CASpringAnimation(keyPath: "transform.scale")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.stiffness = 200
+        animation.mass = 2
+        animation.duration = 2
+        animation.beginTime = CACurrentMediaTime() + 1
+        animation.fillMode = CAMediaTimingFillMode.backwards
+        
+        self.authButton.layer.add(animation, forKey: nil)
+    }
+    
+    
+    
+     // MARK: - UIPanGestureRecognizer
+    @objc func onPan(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            interactiveAnimator?.startAnimation()
+            
+            interactiveAnimator = UIViewPropertyAnimator(duration: 0.5,
+                                                         dampingRatio: 0.5,
+                                                         animations: {
+                self.authButton.transform = CGAffineTransform(translationX: 0,
+                                                              y: 150)
+            })
+            
+            interactiveAnimator.pauseAnimation()
+        case .changed:
+            let translation = recognizer.translation(in: self.view)
+            interactiveAnimator.fractionComplete = translation.y / 100
+        case .ended:
+            interactiveAnimator.stopAnimation(true)
+            
+            interactiveAnimator.addAnimations {
+                self.authButton.transform = .identity
+            }
+            
+            interactiveAnimator.startAnimation()
+        default: return
+        }
+    }
     /*
      // MARK: - Navigation
      
