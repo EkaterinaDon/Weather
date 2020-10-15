@@ -29,6 +29,13 @@ class WeatherCell: UICollectionViewCell {
         }
     }
     
+    static let dateFormatter: DateFormatter = {
+            let df = DateFormatter()
+            df.dateFormat = "dd.MM.yyyy HH.mm"
+            return df
+        }()
+
+    
     override func layoutSubviews() {
         
         super.layoutSubviews()
@@ -36,5 +43,15 @@ class WeatherCell: UICollectionViewCell {
         self.shadowView.layer.shadowPath = UIBezierPath(ovalIn: self.shadowView.bounds).cgPath
         self.containerView.layer.cornerRadius = self.containerView.frame.width / 2
     }
+    
+    func configure(whith weather: Weather) {
+            let date = Date(timeIntervalSince1970: weather.date)
+            let stringDate = WeatherCell.dateFormatter.string(from: date)
+            
+            self.weather.text = String(weather.temp)
+            time.text = stringDate
+            icon.image = UIImage(named: weather.weatherIcon)
+        }
+
     
 }
