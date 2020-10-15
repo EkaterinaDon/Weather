@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import RealmSwift
 
 class WeatherCollectionViewController: UIViewController {
     
@@ -23,15 +24,30 @@ class WeatherCollectionViewController: UIViewController {
         super.viewDidLoad()
         
         // отправим запрос для получения погоды в Москве
-        weatherService.loadWeatherData(city: "Moscow") { [weak self] weathers in
-                // сохраняем полученные данные в массиве, чтобы коллекция могла получить к ним доступ
-                    self?.weathers = weathers
-                // коллекция должна прочитать новые данные
+        weatherService.loadWeatherData(city: "Moscow") { [weak self] in
+                    
+                    self?.loadData()
+                    
                     self?.weatherCollectionView?.reloadData()
                 }
+
   
     }
     
+    func loadData() {
+            do {
+                let realm = try Realm()
+                
+                let weathers = realm.objects(Weather.self).filter("city == %@", "Moscow")
+                
+                self.weathers = Array(weathers)
+                
+            } catch {
+    // если произошла ошибка, выводим ее в консоль
+                print(error)
+            }
+        }
+
 }
 
 extension WeatherCollectionViewController: UICollectionViewDataSource {

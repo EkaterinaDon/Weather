@@ -6,6 +6,7 @@ target 'Weather' do
   use_frameworks!
 pod 'Alamofire', '~> 5.2'
 pod 'RealmSwift'
+pod 'SwiftyJSON', '~> 4.0'
   # Pods for Weather
 
 post_install do |installer|
