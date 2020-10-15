@@ -27,7 +27,7 @@ class AllCitiesCell: UITableViewCell {
         self.cityName.text = city
         self.cityEmblemView.image = emblem
         
-        self.backgroundColor = UIColor.blue
+        self.backgroundColor = UIColor.black
     }
     
     override func prepareForReuse() {

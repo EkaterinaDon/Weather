@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class WeatherCollectionViewController: UIViewController {
     
@@ -14,26 +15,35 @@ class WeatherCollectionViewController: UIViewController {
     
     @IBOutlet weak var dayPicker: WeekDayPicker!
     
+    let weatherService = WeatherService()
+    var weathers = [Weather]()
+    let dateFormatter = DateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        // отправим запрос для получения погоды в Москве
+        weatherService.loadWeatherData(city: "Moscow") { [weak self] weathers in
+                // сохраняем полученные данные в массиве, чтобы коллекция могла получить к ним доступ
+                    self?.weathers = weathers
+                // коллекция должна прочитать новые данные
+                    self?.weatherCollectionView?.reloadData()
+                }
+  
     }
     
 }
 
 extension WeatherCollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return weathers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCell
-        //cell.backgroundColor = .lightGray
-        cell.weather.text = "30 C"
-        cell.time.text = "03.08.2020 15:30"
-        // Configure the cell
         
+        cell.configure(whith: weathers[indexPath.row])
+
         return cell
     }
     

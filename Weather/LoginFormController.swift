@@ -167,15 +167,7 @@ class LoginFormController: UIViewController {
    //заголовка Weather создадим пружинную анимацию, будто он опускается немного ниже своего конечного местоположения, а затем возвращается к нему.
     func animateTitleAppearing() {
         
-//        UIView.animate(withDuration: 1,
-//                       delay: 1,
-//                       usingSpringWithDamping: 0.5,
-//                       initialSpringVelocity: 0,
-//                       options: .curveEaseOut,
-//                       animations: {
-//                           self.titleView.transform = .identity
-//                       },
-//                       completion: nil)
+
         self.titleView.transform = CGAffineTransform(translationX: 0, y: -self.view.bounds.height / 2)
 
         let animator = UIViewPropertyAnimator(duration: 1,
