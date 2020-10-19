@@ -7,16 +7,128 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "04A5B402-2707-4C57-A693-5F39EB8089B3"
+            uuid = "9DCF2DFB-BE0F-4D0E-8039-8AB89FEFC37A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather/MyCities/MyCitiesController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "pairTableAndRealm()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9DCF2DFB-BE0F-4D0E-8039-8AB89FEFC37A - 335a92e9b4c26773"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (RealmSwift.RealmCollectionChange&lt;RealmSwift.Results&lt;Weather.City&gt;&gt;) -&gt; () in Weather.MyCitiesController.pairTableAndRealm() -&gt; ()"
+                  moduleName = "Weather"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ekaterina/Documents/Weather/Weather/MyCities/MyCitiesController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "99"
+                  endingLineNumber = "99"
+                  offsetFromSymbolStart = "445">
+               </Location>
+               <Location
+                  uuid = "9DCF2DFB-BE0F-4D0E-8039-8AB89FEFC37A - 335a92e9b4c26773"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (RealmSwift.RealmCollectionChange&lt;RealmSwift.Results&lt;Weather.City&gt;&gt;) -&gt; () in Weather.MyCitiesController.pairTableAndRealm() -&gt; ()"
+                  moduleName = "Weather"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ekaterina/Documents/Weather/Weather/MyCities/MyCitiesController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "99"
+                  endingLineNumber = "99"
+                  offsetFromSymbolStart = "1608">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C2931B04-B30B-4EA1-A5E4-B423B249383A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather/MyCities/MyCitiesController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "pairTableAndRealm()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EA2B5C0C-9EF0-44F9-A579-3163C4B07140"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather/MyCities/MyCitiesController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "pairTableAndRealm()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EA2B5C0C-9EF0-44F9-A579-3163C4B07140 - 335a92e9b4c264cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (RealmSwift.RealmCollectionChange&lt;RealmSwift.Results&lt;Weather.City&gt;&gt;) -&gt; () in Weather.MyCitiesController.pairTableAndRealm() -&gt; ()"
+                  moduleName = "Weather"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ekaterina/Documents/Weather/Weather/MyCities/MyCitiesController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "701">
+               </Location>
+               <Location
+                  uuid = "EA2B5C0C-9EF0-44F9-A579-3163C4B07140 - c9c68363b0bbcc43"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Int) -&gt; Foundation.IndexPath in closure #1 (RealmSwift.RealmCollectionChange&lt;RealmSwift.Results&lt;Weather.City&gt;&gt;) -&gt; () in Weather.MyCitiesController.pairTableAndRealm() -&gt; ()"
+                  moduleName = "Weather"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ekaterina/Documents/Weather/Weather/MyCities/MyCitiesController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "95F8368F-6D22-46FE-8B12-CD30CD3CAE9C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Weather/Services/WeatherService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "saveWeatherData(_:city:)"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "loadWeatherData(city:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

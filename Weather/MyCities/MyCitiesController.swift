@@ -7,56 +7,34 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MyCitiesController: UITableViewController {
     
-    var cities = [String]()
+    var weatherService = WeatherService()
+    var cityes: Results<City>?
+    var token: NotificationToken?
     
-    @IBAction func addCity(segue: UIStoryboardSegue) {
-        
-        //проверяем идентификатор, чтобы убедиться что это нужный переход
-        if segue.identifier == "addCity" {
-            
-            //получаем ссылку на контроллер, с которого осуществлен переход
-            guard let allCitiesController = segue.source as? AllCitiesController else { return }
-            
-            //получаем индекс выделенной ячейки
-            if let indexPath = allCitiesController.tableView.indexPathForSelectedRow {
-                //получаем город по индексу
-                let city = allCitiesController.cities[indexPath.row]
-                //проверяем что города нет в списке
-                if !cities.contains(city.title) {
-                    //добавляем город в список выбранных
-                    cities.append(city.title)
-                    //обновляем таблицу
-                    tableView.reloadData()
-                }
-            }
+    @IBAction func addButtonPressed(_ sender: Any) {
+            showAddCityForm()
         }
-    }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        //weatherService.loadWeatherData(city: "Moscow")
+        pairTableAndRealm()
+
     }
     
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1 
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return cities.count
+        return cityes!.count
     }
     
     
@@ -66,10 +44,10 @@ class MyCitiesController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCitiesCell", for: indexPath) as! MyCitiesCell
         
         //получаем город для строки
-        let city = cities[indexPath.row]
+        let city = cityes![indexPath.row]
         
         // устанавливаем город в надпись ячейки
-        cell.myCityName.text = city // в методичке cell.cityName = city
+        cell.myCityName.text = city.name
         
         return cell
     }
@@ -86,16 +64,83 @@ class MyCitiesController: UITableViewController {
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        //если нажали Удалить
-        if editingStyle == .delete {
-            //удаляем город из массива
-            cities.remove(at: indexPath.row)
-            // Delete the row from table
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-        }    
+        let city = cityes![indexPath.row]
+                if editingStyle == .delete {
+                    do {
+                        let realm = try Realm()
+                        realm.beginWrite()
+                        realm.delete(city.weathers)
+                        realm.delete(city)
+                        try realm.commitWrite()
+                    } catch {
+                        print(error)
+                    }
+                }
+
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toWeatherViewController", let cell = sender as? UITableViewCell {
+                let ctrl = segue.destination as! WeatherCollectionViewController
+                if let indexPath = tableView.indexPath(for: cell) {
+                    ctrl.cityName = cityes![indexPath.row].name
+                }
+            }
+        }
+
+    
+    
+    func pairTableAndRealm() {
+            guard let realm = try? Realm() else { return }
+            cityes = realm.objects(City.self)
+        token = cityes!.observe { [weak self] (changes: RealmCollectionChange) in
+                guard let tableView = self?.tableView else { return }
+                switch changes {
+                case .initial:
+                    tableView.reloadData()
+                case .update(_, let deletions, let insertions, let modifications):
+                    tableView.beginUpdates()
+                    tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                         with: .automatic)
+                    tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                    tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                         with: .automatic)
+                    tableView.endUpdates()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        }
+
+    
+    func showAddCityForm() {
+            let alertController = UIAlertController(title: "Введите город", message: nil, preferredStyle: .alert)
+            alertController.addTextField(configurationHandler: {(_ textField: UITextField) -> Void in
+            })
+        let confirmAction = UIAlertAction(title: "Добавить", style: .default) { [weak self] action in
+                guard let name = alertController.textFields?[0].text else { return }
+                self?.addCity(name: name)
+            }
+            alertController.addAction(confirmAction)
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: {  })
+        }
+
+    func addCity(name: String) {
+            let newCity = City()
+            newCity.name = name
+            do {
+                let realm = try Realm()
+                realm.beginWrite()
+                realm.add(newCity, update: .all)
+                try realm.commitWrite()
+            } catch {
+                print(error)
+            }
+        }
+
     
     /*
      // Override to support rearranging the table view.
